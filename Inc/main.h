@@ -4,10 +4,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l4xx.h"
 
-/* Defines -------------------------------------------------------------------*/
+
+/* Configuration **************************************************************/
 #define DMA_BUF_SIZE        64      /* DMA circular buffer size in bytes */
 #define DMA_TIMEOUT_MS      10      /* DMA Timeout duration in msec */
+/******************************************************************************/
 
+
+/* Defines -------------------------------------------------------------------*/
 #define LED_G_Port          GPIOE
 #define LED_G_Pin           GPIO_PIN_8
 #define LED_R_Port          GPIOB

@@ -4,12 +4,12 @@
   ******************************************************************************
   * @author Akos Pasztor
   * @file   usbd_cdc_if.c
-  * @brief  
-  *			
-  *			
-  *
+  * @brief  USB CDC VCP
+  *	        This file contains the USB CDC VCP (Virtual COM Port)
+  *         implementation using the STM32Cube USB Device Library.
+  * @see    www.st.com/resource/en/user_manual/dm00108129.pdf
   ******************************************************************************
-  * Copyright (c) 2017 Akos Pasztor. All rights reserved.
+  * Copyright (c) 2017 Akos Pasztor.                    https://akospasztor.com
   ******************************************************************************
 **/
 

@@ -4,12 +4,12 @@
   ******************************************************************************
   * @author Akos Pasztor
   * @file   stm32l4xx_it.c
-  * @brief  
-  *			
-  *			
-  *
+  * @brief  Interrupt Service Routines
+  *	        This file contains the exception and peripheral interrupt handlers.
+  *	
+  * 
   ******************************************************************************
-  * Copyright (c) 2017 Akos Pasztor. All rights reserved.
+  * Copyright (c) 2017 Akos Pasztor.                    https://akospasztor.com
   ******************************************************************************
 **/
 

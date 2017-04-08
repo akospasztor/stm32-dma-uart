@@ -4,18 +4,18 @@
   ******************************************************************************
   * @author Akos Pasztor
   * @file   main.c
-  * @brief  
-  *			
-  *			
-  *
+  * @brief  Main program
+  *         This file demonstrates the usage of peripheral DMA configured in
+  *         circular mode with timeout event.
+  *         
   ******************************************************************************
-  * Copyright (c) 2017 Akos Pasztor. All rights reserved.
+  * Copyright (c) 2017 Akos Pasztor.                    https://akospasztor.com
   ******************************************************************************
 **/
 
 /* Includes ------------------------------------------------------------------*/
+#include "stm32l4xx.h"
 #include "main.h"
-#include "stm32l4xx_hal.h"
 #include "usb_device.h"
 #include "usbd_cdc_if.h"
 
@@ -31,6 +31,7 @@ DMA_Event_t dma_uart_rx = {0,0,DMA_BUF_SIZE};
 uint8_t dma_rx_buf[DMA_BUF_SIZE];       /* Circular buffer for DMA */
 uint8_t data[DMA_BUF_SIZE] = {'\0'};    /* Data buffer that contains newly received data */
 
+/** Main function *************************************************************/
 int main(void)
 {
     HAL_Init();
@@ -122,7 +123,7 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
     Error_Handler();
 }
 
-/* USART2 Configuration */
+/* UART2 Configuration */
 void UART_Init(void)
 {
     huart2.Instance = USART2;
@@ -197,7 +198,11 @@ void GPIO_Init(void)
 
 /* System Clock Configuration */
 void SystemClock_Config(void)
-{    
+{
+    /* Clock config:
+        Source: MSI @ 4kHz
+        Core, System and Peripherals: 48MHz
+    */
     RCC_OscInitTypeDef RCC_OscInitStruct;
     RCC_ClkInitTypeDef RCC_ClkInitStruct;
     RCC_PeriphCLKInitTypeDef PeriphClkInit;
