@@ -4,18 +4,17 @@
   ******************************************************************************
   * @author Akos Pasztor
   * @file   stm32l4xx_hal_msp.c
-  * @brief  
-  *			
-  *			
-  *
+  * @brief  ST HAL MSP callbacks
+  *         This file contains the initialization callbacks of ST HAL library.
+  *              
+  * @see    www.st.com/resource/en/user_manual/dm00105879.pdf    
   ******************************************************************************
-  * Copyright (c) 2017 Akos Pasztor. All rights reserved.
+  * Copyright (c) 2017 Akos Pasztor.                    https://akospasztor.com
   ******************************************************************************
 **/
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l4xx_hal.h"
-#include "main.h"
 
 void HAL_MspInit(void)
 {
