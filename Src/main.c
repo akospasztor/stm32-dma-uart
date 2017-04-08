@@ -198,7 +198,11 @@ void GPIO_Init(void)
 
 /* System Clock Configuration */
 void SystemClock_Config(void)
-{    
+{
+    /* Clock config:
+        Source: MSI @ 4kHz
+        Core, System and Peripherals: 48MHz
+    */
     RCC_OscInitTypeDef RCC_OscInitStruct;
     RCC_ClkInitTypeDef RCC_ClkInitStruct;
     RCC_PeriphCLKInitTypeDef PeriphClkInit;
