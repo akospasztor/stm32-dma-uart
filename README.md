@@ -11,11 +11,11 @@ ST suggests two methods for implementing DMA timeout in Section 2 of AN3019 [[2]
 In this demonstration, a more efficient idea is presented to implement DMA timeout. The UART peripheral can be configured to generate an interrupt when the UART module detects an idle line (end of transmission). After generating an idle line interrupt, it is not generated again until there is new data received. (For more information about how  idle line detection and interrupt generation works, please refer to [[3]](#references).) After detecting an idle line, a software timer is started with user-defined period. If no DMA transmission complete interrupt is generated within this period, a DMA timeout event is generated and new data in DMA buffer can be processed. This method provides an efficient way to implement DMA timeout and minimizing overhead by generating a single additional interrupt (UART idle line interrupt) after the end of transmission.
 
 ## Implementation
-The method is implemented and demonstrated on a 32L476G Discovery [[4]](#references) kit equipped with a STM32L476VG MCU [[5]](#references). The on-board ST-Link provides an USB VCP (Virtual COM Port) to UART interface for the microcontroller. The UART lines are connected to PD5 and PD6 pins of the MCU. The DMA controller is initialized to receive data from this UART line. In this demonstration, the USB peripheral of the MCU is initialized in CDC VCP mode, therefore the received data is forwarded back to the PC via USB.
+The method is implemented and demonstrated on a 32L476G Discovery [[4]](#references) kit equipped with a STM32L476VG MCU [[5]](#references). The on-board ST-Link provides an USB VCP (Virtual COM Port) to UART interface for the microcontroller. The UART lines are connected to PD5 and PD6 pins of the MCU. The DMA controller is initialized to receive data from this UART line. In this demonstration, the USB peripheral of the MCU is initialized in CDC VCP mode, therefore the received data is forwarded back to the PC via USB. The demonstration software uses the official HAL library of ST [[6]](#references) and is compiled with IAR EWARM.
 
-(figure AND caption!)
+![System overview](system-overview.png)
 
-The demonstration software uses the official HAL library of ST [[6]](#references) and is compiled with IAR EWARM.
+*Figure 1: System overview*
 
 ## Source code organization
 ```
@@ -28,7 +28,10 @@ stm32-dma-uart/
 ```
 `Drivers` and `Middlewares` folder contain the CMSIS, HAL libraries and USB libraries for the microcontroller. The software source code and corresponding header files can be found in `Src` and `Inc` folders respectively.
 
-## How to use
+The `DMA_Event_t` structure defined in `main.h` holds the required variables for the DMA timeout implementation. The DMA buffer size and timeout duration can be configured in `main.h`. When a UART idle interrupt occurs, the timer is set to the configured duration and decreased in the SysTick interrupt handler. After timeout, the flag is set and the DMA transmission complete callback is executed.  The prevCNDTR stores the previous value of the DMA CNDTR register value, thus only the relevant, newly received data chunk can be extracted and processed from the DMA buffer.
+
+## Performance measurements
+
 
 ## Refs
 
