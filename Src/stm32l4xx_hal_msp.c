@@ -60,6 +60,7 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
         __HAL_RCC_USART2_CLK_DISABLE();
         HAL_GPIO_DeInit(GPIOD, GPIO_PIN_5 | GPIO_PIN_6);
         HAL_DMA_DeInit(huart->hdmarx);
+        HAL_DMA_DeInit(huart->hdmatx);
     }
 }
 

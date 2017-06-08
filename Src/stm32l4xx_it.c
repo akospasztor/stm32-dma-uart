@@ -21,6 +21,7 @@
 /* External variables --------------------------------------------------------*/
 extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 extern DMA_HandleTypeDef hdma_usart2_rx;
+extern DMA_HandleTypeDef hdma_usart2_tx;
 extern DMA_Event_t dma_uart_rx;
 
 /******************************************************************************/
@@ -129,6 +130,14 @@ void USART2_IRQHandler(void)
         /* Start DMA timer */
         dma_uart_rx.timer = DMA_TIMEOUT_MS;
     }
+    
+    /* UART Tx Complete */
+    if((USART2->ISR & USART_ISR_TC) != RESET)
+    {
+        USART2->ICR = UART_CLEAR_TCF;
+        /* Set UART handle state to ready */
+        ((UART_HandleTypeDef*)(hdma_usart2_tx.Parent))->gState = HAL_UART_STATE_READY;
+    }
 }
 
 /**
@@ -137,6 +146,14 @@ void USART2_IRQHandler(void)
 void DMA1_Channel6_IRQHandler(void)
 {
     HAL_DMA_IRQHandler(&hdma_usart2_rx);
+}
+
+/**
+* @brief This function handles DMA1 channel7 global interrupt.
+*/
+void DMA1_Channel7_IRQHandler(void)
+{
+    HAL_DMA_IRQHandler(&hdma_usart2_tx);
 }
 
 /**

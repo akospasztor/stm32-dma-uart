@@ -22,6 +22,7 @@
 /* HAL handle structures -----------------------------------------------------*/
 UART_HandleTypeDef huart2;
 DMA_HandleTypeDef hdma_usart2_rx;
+DMA_HandleTypeDef hdma_usart2_tx;
 
 /* DMA Timeout event structure
  * Note: prevCNDTR initial value must be set to maximum size of DMA buffer!
@@ -114,7 +115,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     }
     
     /* Send received data over USB */
-    CDC_Transmit_FS(data, length);
+    //CDC_Transmit_FS(data, length);
+    HAL_UART_Transmit_DMA(&huart2, data, length);
 }
 
 /* Error callback */
@@ -152,6 +154,7 @@ void DMA_Init(void)
 {
     __HAL_RCC_DMA1_CLK_ENABLE();
     
+    /* DMA RX */
     hdma_usart2_rx.Instance = DMA1_Channel6;
     hdma_usart2_rx.Init.Request = DMA_REQUEST_2;
     hdma_usart2_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
@@ -168,9 +171,30 @@ void DMA_Init(void)
             
     __HAL_LINKDMA(&huart2,hdmarx, hdma_usart2_rx);
     
-    /* DMA Interrupt Configuration */
+    /* DMA TX */
+    hdma_usart2_tx.Instance = DMA1_Channel7;
+    hdma_usart2_tx.Init.Request = DMA_REQUEST_2;
+    hdma_usart2_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+    hdma_usart2_tx.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_usart2_tx.Init.MemInc = DMA_MINC_ENABLE;
+    hdma_usart2_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+    hdma_usart2_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+    hdma_usart2_tx.Init.Mode = DMA_NORMAL;
+    hdma_usart2_tx.Init.Priority = DMA_PRIORITY_LOW;
+    if(HAL_DMA_Init(&hdma_usart2_tx) != HAL_OK)
+    {
+        Error_Handler();
+    }
+
+    __HAL_LINKDMA(&huart2,hdmatx, hdma_usart2_tx);
+    
+    /* DMA1_Channel6_IRQn Interrupt Configuration */
     HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(DMA1_Channel6_IRQn);
+    
+    /* DMA1_Channel7_IRQn Interrupt Configuration */
+    HAL_NVIC_SetPriority(DMA1_Channel7_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(DMA1_Channel7_IRQn);
 }
 
 /* GPIO Configuration */
